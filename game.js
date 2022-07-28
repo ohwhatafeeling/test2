@@ -42,8 +42,51 @@ function create() {
   this.player.setBounce(0.1);
   this.player.setCollideWorldBounds(true);
   this.physics.add.collider(this.player, platforms);
+
+  this.anims.create({
+    key: 'run',
+    frames: this.anims.generateFrameNumbers('maskDudeRun', {start: 0, end: 11}),
+    frameRate: 20,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'idle',
+    frames: this.anims.generateFrameNumbers('maskDudeIdle', {start: 0, end: 10}),
+    frameRate: 20,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'jump',
+    frames: this.anims.generateFrameNumbers('maskDudeJump', {start: 0, end: 0}),
+    frameRate: 20,
+    repeat: -1
+  });
+
+  this.cursors = this.input.keyboard.createCursorKeys();
+
 }
 
 function update() {
-
+  if (this.cursors.left.isDown) {
+    this.player.setVelocityX(-200);
+    if (this.player.body.onFloor()) {
+      this.player.play('run', true);
+    }
+  } else if (this.cursors.right.isDown) {
+    this.player.setVelocityX(200);
+    if (this.player.body.onFloor()) {
+      this.player.play('run', true);
+    }
+  } else {
+    this.player.setVelocityX(0);
+    if (this.player.body.onFloor()) {
+      this.player.play('idle', true);
+    }
+  }
+  if ((this.cursors.up.isDown || this.cursors.space.isDown) && this.player.body.onFloor()) {
+    this.player.setVelocityY(-350);
+    this.player.play('jump', true);
+  }
 }
