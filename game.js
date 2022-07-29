@@ -47,6 +47,8 @@ function create() {
 
   platforms.setCollisionByExclusion(-1, true);
 
+  scoreText = this.add.text(16, 16, 'score: 0', {fontSize: '32px', fill: '#fff'});
+
   this.apples = this.physics.add.group({
     allowGravity: false,
     immovable: true
@@ -93,6 +95,9 @@ function create() {
 
   this.cursors = this.input.keyboard.createCursorKeys();
 
+  this.physics.add.overlap(this.player, this.apples, collectApple, null, this);
+  this.physics.add.overlap(this.player, this.bananas, collectBanana, null, this);
+
 }
 
 function update() {
@@ -116,4 +121,16 @@ function update() {
     this.player.setVelocityY(-350);
     this.player.play('jump', true);
   }
+}
+
+function collectApple(player, apple) {
+  apple.disableBody(true, true);
+  score += 10;
+  scoreText.setText('score: ' + score);
+}
+
+function collectBanana(player, banana) {
+  banana.disableBody(true, true);
+  score += 20;
+  scoreText.setText('score: ' + score);
 }
