@@ -67,7 +67,18 @@ function create() {
     const bananaSprite = this.bananas.create(banana.x, banana.y - 32, 'banana').setOrigin(0);
   });
 
-  this.player = this.physics.add.sprite(32, 32, 'maskDudeIdle');
+  map.getObjectLayer('StartEnd').objects.forEach(point => {
+    if (point.name == 'Start') {
+      startX = point.x;
+      startY = point.y;
+    }
+    if (point.name == 'End') {
+      endX = point.x;
+      endY = point.y;
+    }
+  })
+
+  this.player = this.physics.add.sprite(startX, startY, 'maskDudeIdle');
   this.player.setBounce(0.1);
   this.player.setCollideWorldBounds(true);
   this.physics.add.collider(this.player, platforms);
@@ -142,6 +153,9 @@ function update() {
   if ((this.cursors.up.isDown || this.cursors.space.isDown) && this.player.body.onFloor()) {
     this.player.setVelocityY(-350);
     this.player.play('jump', true);
+  }
+  if ((((this.player.x + 16) > endX) && ((this.player.x -16) < endX)) && (((this.player.y + 16) > endY) && ((this.player.y - 16) < endY))) {
+    scoreText.setText('GAME COMPLETE\nYour score: ' + score);
   }
 }
 
