@@ -21,6 +21,13 @@ const config = {
   }
 }
 
+var startX;
+var startY;
+var endX;
+var endY;
+var score = 0;
+var scoreText;
+
 const game = new Phaser.Game(config);
 
 function preload() {
@@ -29,6 +36,8 @@ function preload() {
   this.load.spritesheet('maskDudeRun', 'assets/Main Characters/Mask Dude/Run (32x32).png', {frameWidth: 32, frameHeight: 32});
   this.load.spritesheet('maskDudeIdle', 'assets/Main Characters/Mask Dude/Idle (32x32).png', {frameWidth: 32, frameHeight: 32});
   this.load.spritesheet('maskDudeJump', 'assets/Main Characters/Mask Dude/Jump (32x32).png', {frameWidth: 32, frameHeight: 32});
+  this.load.spritesheet('apple', 'assets/Items/Fruits/Apple.png', {frameWidth: 32, frameHeight: 32});
+  this.load.spritesheet('banana', 'assets/Items/Fruits/Bananas.png', {frameWidth: 32, frameHeight: 32});
 }
 
 function create() {
@@ -37,6 +46,24 @@ function create() {
   const platforms = map.createStaticLayer('platform_layer', tileset, 0, 0);
 
   platforms.setCollisionByExclusion(-1, true);
+
+  this.apples = this.physics.add.group({
+    allowGravity: false,
+    immovable: true
+  });
+
+  this.bananas = this.physics.add.group({
+    allowGravity: false,
+    immovable: true
+  });
+
+  map.getObjectLayer('Apples').objects.forEach((apple) => {
+    const appleSprite = this.apples.create(apple.x, apple.y - 32, 'apple').setOrigin(0);
+  });
+
+  map.getObjectLayer('Bananas').objects.forEach(banana => {
+    const bananaSprite = this.bananas.create(banana.x, banana.y - 32, 'banana').setOrigin(0);
+  });
 
   this.player = this.physics.add.sprite(32, 32, 'maskDudeIdle');
   this.player.setBounce(0.1);
