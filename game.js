@@ -93,6 +93,28 @@ function create() {
     repeat: -1
   });
 
+  this.anims.create({
+    key: 'applePlay',
+    frames: this.anims.generateFrameNumbers('apple', {start: 0, end: 16}),
+    frameRate: 20,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'bananaPlay',
+    frames: this.anims.generateFrameNumbers('banana', {start: 0, end: 16}),
+    frameRate: 20,
+    repeat: -1
+  });
+
+  this.apples.children.iterate(apple => {
+    apple.play('applePlay');
+  });
+
+  this.bananas.children.iterate(banana => {
+    banana.play('bananaPlay');
+  });
+
   this.cursors = this.input.keyboard.createCursorKeys();
 
   this.physics.add.overlap(this.player, this.apples, collectApple, null, this);
